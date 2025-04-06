@@ -2,50 +2,40 @@ import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Login from "./components/SignIn/Login";
 import CreateStudent from "./components/CreateStudent/CreateStudent";
-import ListStudent from "./components/ListStudent/ListStudent";
-
-export interface Crianca {
-  id: number;
-  nome: string;
-  idade: string;
-  responsavel: string;
-  telefone: string;
-  liberadoPor?: string;
-}
+import StudentList from "./components/ListStudent/ListStudent";
+import client from "./client";
+import { Toaster } from "react-hot-toast";
 
 function App() {
-  const [logado, setLogado] = useState(false);
-  const [crianças, setCriancas] = useState<Crianca[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loadingSession, setLoadingSession] = useState(true);
 
   useEffect(() => {
-    const salvas = localStorage.getItem("crianças");
-    if (salvas) setCriancas(JSON.parse(salvas));
+    const checkSession = async () => {
+      const { data } = await client.auth.getSession();
+      if (data?.session?.user) {
+        setIsLoggedIn(true);
+      }
+      setLoadingSession(false);
+    };
+
+    checkSession();
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("crianças", JSON.stringify(crianças));
-  }, [crianças]);
+  if (loadingSession) return (<div style={{ textAlign: "center", padding: "20px" }}>
+    <div className="spinner" />
+  </div>);
 
-  const adicionarCrianca = (nova: Omit<Crianca, "id">) => {
-    setCriancas([...crianças, { ...nova, id: Date.now() }]);
-  };
-
-  const registrarRetirada = (id: number, liberadoPor: string) => {
-    setCriancas(crianças.map(c => c.id === id ? { ...c, liberadoPor } : c));
-  };
-
-  if (!logado) return <Login onLogin={() => setLogado(true)} />;
+  if (!isLoggedIn) return <Login onLogin={() => setIsLoggedIn(true)} />;
 
   return (
-    <Routes>
-      <Route path="/" element={<CreateStudent onAdd={adicionarCrianca} />} />
-      <Route
-        path="/lista"
-        element={
-          <ListStudent crianças={crianças} onRetirar={registrarRetirada} />
-        }
-      />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<CreateStudent />} />
+        <Route path="/lista" element={<StudentList />} />
+      </Routes>
+      <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
+    </>
   );
 }
 

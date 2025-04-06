@@ -2,26 +2,26 @@ import { useState } from "react";
 import * as S from "./styles";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
+import toast from "react-hot-toast";
 
 interface ModalProps {
-  onConfirm: (nome: string) => void;
+  onConfirm: (name: string) => void;
   onClose: () => void;
 }
 
 export default function Modal({ onConfirm, onClose }: ModalProps) {
-  const [nome, setNome] = useState("");
+  const [name, setName] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!nome.trim()) return alert("Digite um nome válido");
-    onConfirm(nome.trim());
+    if (!name.trim()) return toast.error("Digite um nome válido");
+    onConfirm(name.trim());
+    toast.success("Retirada confirmada com sucesso!");
   };
 
   return (
-    <S.Overlay >
-      <S.ModalForm
-        onSubmit={handleSubmit}
-      >
+    <S.Overlay>
+      <S.ModalForm onSubmit={handleSubmit}>
         <S.ModalTitle>
           Quem retirou a criança?
         </S.ModalTitle>
@@ -29,8 +29,8 @@ export default function Modal({ onConfirm, onClose }: ModalProps) {
         <Input
           type="text"
           placeholder="Digite o nome"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           style={{ marginBottom: "20px" }}
         />
 
