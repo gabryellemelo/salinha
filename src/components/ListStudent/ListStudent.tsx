@@ -76,7 +76,7 @@ export default function StudentList() {
                 <S.ChildInfo>Telefone: {formatPhone(student.phone)}</S.ChildInfo>
 
                 {student.releasedBy ? (
-                  <S.ReleasedBy>Liberado por: {student.releasedBy}</S.ReleasedBy>
+                  <S.ReleasedBy>Retirado pelo responsável: {student.releasedBy}</S.ReleasedBy>
                 ) : (
                   <S.ContainerButton>
                     <S.WhatsAppButton
