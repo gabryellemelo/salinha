@@ -5,33 +5,44 @@ import CreateStudent from "./components/CreateStudent/CreateStudent";
 import StudentList from "./components/ListStudent/ListStudent";
 import client from "./client";
 import { Toaster } from "react-hot-toast";
+import ClassDetail from "./components/ClassDetail/ClassDetail";
+import { useAuth } from "./hooks/useAuth";
 
 function App() {
+  const auth = useAuth();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loadingSession, setLoadingSession] = useState(true);
 
   useEffect(() => {
     const checkSession = async () => {
       const { data } = await client.auth.getSession();
+
+      auth.onAuthStateChange();
+
       if (data?.session?.user) {
         setIsLoggedIn(true);
       }
+
       setLoadingSession(false);
     };
 
     checkSession();
   }, []);
 
-  if (loadingSession) return (<div style={{ textAlign: "center", padding: "20px" }}>
-    <div className="spinner" />
-  </div>);
+  if (loadingSession)
+    return (
+      <div style={{ textAlign: "center", padding: "20px" }}>
+        <div className="spinner" />
+      </div>
+    );
 
   if (!isLoggedIn) return <Login onLogin={() => setIsLoggedIn(true)} />;
 
   return (
     <>
       <Routes>
-        <Route path="/" element={<CreateStudent />} />
+        <Route path="/" element={<ClassDetail />} />
+        <Route path="/create-student" element={<CreateStudent />} />
         <Route path="/lista" element={<StudentList />} />
       </Routes>
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />

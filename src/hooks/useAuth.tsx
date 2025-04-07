@@ -56,8 +56,8 @@ export const useAuth = () => {
 
   const onAuthStateChange = () => {
     const { data } = client.auth.onAuthStateChange((event, session) => {
-      console.log("Event:", event);
-      console.log("Session:", session);
+      // console.log("Event:", event);
+      // console.log("Session:", session);
 
       setUser(session?.user ? mapUser(session?.user as AuthUser) : null);
     });
