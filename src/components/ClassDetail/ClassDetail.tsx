@@ -128,7 +128,7 @@ export default function ClassDetail() {
           color="secondary"
           size="md"
           style={{ marginTop: "32px", width: "100%" }}
-          onClick={() => navigate("/create-student")}
+          onClick={() => navigate("/")}
         >
           Cadastro
         </Button>
