@@ -62,11 +62,7 @@ export default function ClassDetail() {
         console.error("Erro ao buscar escalas:", error);
         toast.error("Erro ao buscar escalas");
       } else {
-        console.log(
-          "Classes com horários do usuário:",
-          JSON.stringify(data, null, 2)
-        );
-        setClasses(data);
+        setClasses(data || []);
       }
 
       setIsLoading(false);
@@ -80,33 +76,62 @@ export default function ClassDetail() {
       <S.CardContainer>
         <S.Icon src={Ball} alt="Bola colorida" />
 
-        <Typography align="center" size="22px" weight="bold" margin="0 0 8px">
-          Detalhe da Salinha
+        <Typography align="center" size="22px" weight="bold" margin="0 0 16px">
+          Sua Escala na Salinha
         </Typography>
 
-        <div>
-          {isLoading ? (
-            <div>
-              <Typography size="16px" weight="bold">
-                Carregando...
-              </Typography>
-            </div>
-          ) : (
-            classes?.map((item) => (
-              <div key={item.schedule.id}>
-                <Typography size="16px" weight="bold">
-                  {item.schedule.class.name}
+        {isLoading ? (
+          <div style={{ textAlign: "center", padding: "20px" }}>
+            <div className="spinner" />
+            <Typography size="16px" color="#888">
+              Carregando turmas...
+            </Typography>
+          </div>
+        ) : classes.length === 0 ? (
+          <Typography size="14px" color="#555" align="center">
+            Nenhuma turma atribuída a você por enquanto.
+          </Typography>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "20px" }}>
+            {classes.map((item) => (
+              <S.ScheduleCard
+                key={item.schedule.id}
+                style={{
+                  background: "#F9F9F9",
+                  padding: "16px",
+                  borderRadius: "12px",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+                }}
+              >
+                <Typography size="16px" weight="bold" margin="0 0 8px">
+                  Turma: {item.schedule.class.name}
                 </Typography>
-                <Typography size="14px">
+
+                <Typography size="14px" color="#444">
+                  Faixa etária: {item.schedule.class.min_age} a {item.schedule.class.max_age} anos
+                </Typography>
+
+                <Typography size="14px" color="#666">
+                  Data e hora:{" "}
                   {new Date(item.schedule.datetime).toLocaleString("pt-BR", {
                     dateStyle: "short",
                     timeStyle: "short",
                   })}
                 </Typography>
-              </div>
-            ))
-          )}
-        </div>
+              </S.ScheduleCard>
+            ))}
+          </div>
+        )}
+
+        <Button
+          type="button"
+          color="secondary"
+          size="md"
+          style={{ marginTop: "32px", width: "100%" }}
+          onClick={() => navigate("/create-student")}
+        >
+          Cadastro
+        </Button>
       </S.CardContainer>
     </S.Container>
   );
