@@ -43,8 +43,8 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<CreateStudent />} />
-        <Route path="/cadastro" element={<ClassDetail />} />
+        <Route path="/" element={<ClassDetail />} />
+        <Route path="/cadastro" element={<CreateStudent />} />
         <Route path="/lista" element={<StudentList />} />
       </Routes>
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
