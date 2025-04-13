@@ -7,6 +7,7 @@ import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { useStudent } from "../../hooks/useStudent";
 import toast from "react-hot-toast";
+import { useClassStore } from "../../store/useClassStore";
 
 export default function CreateStudent() {
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ export default function CreateStudent() {
 
   const navigate = useNavigate();
   const { createStudent } = useStudent();
+  const { classId } = useClassStore();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,11 +54,22 @@ export default function CreateStudent() {
       return;
     }
 
+    if (!classId) {
+      toast.error("Turma não selecionada. Volte para a tela anterior.");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      const student = await createStudent(formData);
-      console.log("Criança cadastrada:", student);
+      await createStudent({
+        name,
+        age: age,
+        responsible,
+        telephone,
+        class_id: classId,
+      });
+
       toast.success("Criança cadastrada com sucesso!");
 
       setFormData({

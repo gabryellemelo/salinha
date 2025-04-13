@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./components/SignIn/Login";
 import CreateStudent from "./components/CreateStudent/CreateStudent";
 import StudentList from "./components/ListStudent/ListStudent";
@@ -12,6 +12,7 @@ function App() {
   const auth = useAuth();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loadingSession, setLoadingSession] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const checkSession = async () => {
@@ -21,6 +22,7 @@ function App() {
 
       if (data?.session?.user) {
         setIsLoggedIn(true);
+        navigate("/detalhe");
       }
 
       setLoadingSession(false);
@@ -41,8 +43,8 @@ function App() {
   return (
     <>
       <Routes>
-        {/* <Route path="/" element={<ClassDetail />} /> */}
         <Route path="/" element={<CreateStudent />} />
+        <Route path="/detalhe" element={<ClassDetail />} />
         <Route path="/lista" element={<StudentList />} />
       </Routes>
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />

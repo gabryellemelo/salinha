@@ -5,13 +5,13 @@ type CreateStudentPayload = {
   age: string;
   responsible: string;
   telephone: string;
+  class_id: number;
 };
 
 export const useStudent = () => {
   const createStudent = async (payload: CreateStudentPayload) => {
-    const { name, age, responsible, telephone } = payload;
+    const { name, age, responsible, telephone, class_id } = payload;
 
-    // Cria o responsável
     const { data: guardianData, error: guardianError } = await client
       .from("guardian")
       .insert([{ name: responsible, phone: telephone }])
@@ -24,10 +24,9 @@ export const useStudent = () => {
 
     const guardian_id = guardianData.id;
 
-    // Cria a criança
     const { data: childData, error: childError } = await client
       .from("child")
-      .insert([{ name: name, age: Number(age), guardian_id }])
+      .insert([{ name, age: Number(age), guardian_id, class_id }])
       .select("*")
       .single();
 

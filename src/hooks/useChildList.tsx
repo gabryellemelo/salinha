@@ -1,7 +1,7 @@
 import client from "../client";
 
 export const useChildList = () => {
-  const getChildren = async () => {
+  const getChildren = async (classId: number) => {
     const { data, error } = await client
       .from("child")
       .select(`
@@ -13,7 +13,8 @@ export const useChildList = () => {
           name,
           phone
         )
-      `);
+      `)
+      .eq("class_id", classId);
 
     console.log("🔍 Supabase data:", data);
 
@@ -22,19 +23,14 @@ export const useChildList = () => {
       throw error;
     }
 
-    return data.map((c: any) => {
-      console.log("👀 Mapping child:", c);
-
-      return {
-        id: c.id,
-        name: c.name,
-        age: c.age,
-        guardian: c.guardian?.name || "N/A",
-        phone: c.guardian?.phone || "",
-        releasedBy: c.released_by || undefined,
-      };
-    });
-
+    return data.map((c: any) => ({
+      id: c.id,
+      name: c.name,
+      age: c.age,
+      guardian: c.guardian?.name || "N/A",
+      phone: c.guardian?.phone || "",
+      releasedBy: c.released_by || undefined,
+    }));
   };
 
   const releaseChild = async (id: number, releasedBy: string) => {

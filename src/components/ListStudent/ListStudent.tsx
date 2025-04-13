@@ -5,6 +5,8 @@ import * as S from "./styles";
 import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import Modal from "../Modal/Modal";
+import { useClassStore } from "../../store/useClassStore";
+import { useAuth } from "../../hooks/useAuth";
 
 type Student = {
   id: number;
@@ -17,15 +19,20 @@ type Student = {
 
 export default function StudentList() {
   const navigate = useNavigate();
+  const { classId } = useClassStore();
   const [modalId, setModalId] = useState<number | null>(null);
   const [students, setStudents] = useState<Student[]>([]);
   const { getChildren, releaseChild } = useChildList();
   const [loading, setLoading] = useState(true);
+  const auth = useAuth();
+
 
   const fetchStudents = async () => {
+    if (!classId) return;
+
     try {
       setLoading(true);
-      const data = await getChildren();
+      const data = await getChildren(classId);
       setStudents(data);
     } catch (error) {
       alert("Erro ao carregar lista de crianças.");
@@ -36,7 +43,7 @@ export default function StudentList() {
 
   useEffect(() => {
     fetchStudents();
-  }, []);
+  }, [classId]);
 
   const handleRelease = async (id: number, releasedBy: string) => {
     try {
@@ -111,6 +118,18 @@ export default function StudentList() {
           onClick={() => navigate("/")}
         >
           Voltar ao Cadastro
+        </Button>
+        <Button
+          type="button"
+          color="primary"
+          size="md"
+          style={{ width: "100%", marginTop: "12px" }}
+          onClick={async () => {
+            await auth.logout();
+            window.location.href = "/";
+          }}
+        >
+          Fechar salinha
         </Button>
 
         {modalId !== null && (

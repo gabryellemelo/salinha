@@ -52,7 +52,7 @@ export default function Login({ onLogin }: LoginProps) {
         />
 
         <Typography size="22px" weight="bold" align="center">
-          Bem-vindo à Salinha!
+          Bem-vindo ao Sara Kids!
         </Typography>
 
         <Typography
