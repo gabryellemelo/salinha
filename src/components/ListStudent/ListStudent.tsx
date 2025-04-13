@@ -115,7 +115,7 @@ export default function StudentList() {
           color="secondary"
           size="md"
           style={{ marginTop: "30px", padding: "12px", width: "100%" }}
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/cadastro")}
         >
           Voltar ao Cadastro
         </Button>

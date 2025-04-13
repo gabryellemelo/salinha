@@ -22,7 +22,7 @@ function App() {
 
       if (data?.session?.user) {
         setIsLoggedIn(true);
-        navigate("/detalhe");
+        navigate("/");
       }
 
       setLoadingSession(false);
@@ -44,7 +44,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<CreateStudent />} />
-        <Route path="/detalhe" element={<ClassDetail />} />
+        <Route path="/cadastro" element={<ClassDetail />} />
         <Route path="/lista" element={<StudentList />} />
       </Routes>
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />

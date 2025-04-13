@@ -128,7 +128,7 @@ export default function ClassDetail() {
                   style={{ width: "100%", marginTop: 20 }}
                   onClick={() => {
                     setClassId(Number(item.schedule.class.id));
-                    navigate("/");
+                    navigate("/cadastro");
                   }}
                 >
                   Abrir salinha
