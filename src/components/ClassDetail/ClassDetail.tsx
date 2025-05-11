@@ -32,7 +32,7 @@ export default function ClassDetail() {
   useEffect(() => {
     const getDetails = async () => {
       const userId = auth.user?.id;
-
+      console.log("auth -> ", auth.user);
       if (!userId) {
         console.error("Usuário não encontrado");
         return;
@@ -42,7 +42,8 @@ export default function ClassDetail() {
 
       const { data, error } = await client
         .from("schedule_user")
-        .select(`
+        .select(
+          `
                 schedule: schedule_id (
                   id,
                   datetime,
@@ -53,7 +54,8 @@ export default function ClassDetail() {
                     max_age
                   )
                 )
-              `)
+              `
+        )
         .eq("user_id", userId);
 
       if (error) {
@@ -80,7 +82,6 @@ export default function ClassDetail() {
     getDetails();
   }, [auth.user?.id]);
 
-
   return (
     <S.Container>
       <S.CardContainer>
@@ -102,7 +103,14 @@ export default function ClassDetail() {
             Nenhuma turma atribuída a você por enquanto.
           </Typography>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "20px" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "16px",
+              marginTop: "20px",
+            }}
+          >
             {classes.map((item) => (
               <S.ScheduleCard key={item.schedule.id}>
                 <Typography size="16px" weight="bold" margin="0 0 8px">
@@ -110,7 +118,8 @@ export default function ClassDetail() {
                 </Typography>
 
                 <Typography size="14px" color="#444">
-                  Faixa etária: {item.schedule.class.min_age} a {item.schedule.class.max_age} anos
+                  Faixa etária: {item.schedule.class.min_age} a{" "}
+                  {item.schedule.class.max_age} anos
                 </Typography>
 
                 <Typography size="14px" color="#666" margin="0 0 12px">
@@ -128,7 +137,8 @@ export default function ClassDetail() {
                   style={{ width: "100%", marginTop: 20 }}
                   onClick={() => {
                     setClassId(Number(item.schedule.class.id));
-                    navigate("/cadastro");
+                    navigate("/lista");
+                    // navigate("/cadastro");
                   }}
                 >
                   Abrir salinha

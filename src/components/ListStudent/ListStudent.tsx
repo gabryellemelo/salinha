@@ -7,12 +7,13 @@ import Button from "../ui/Button";
 import Modal from "../Modal/Modal";
 import { useClassStore } from "../../store/useClassStore";
 import { useAuth } from "../../hooks/useAuth";
+import { Guardian } from "../ListGuardians/ListGuardians";
 
-type Student = {
+export type Student = {
   id: number;
   name: string;
   age: number;
-  guardian: string;
+  guardian_child: Guardian[];
   phone: string;
   releasedBy?: string;
 };
@@ -25,7 +26,6 @@ export default function StudentList() {
   const { getChildren, releaseChild } = useChildList();
   const [loading, setLoading] = useState(true);
   const auth = useAuth();
-
 
   const fetchStudents = async () => {
     if (!classId) return;
@@ -62,6 +62,45 @@ export default function StudentList() {
   return (
     <S.Container>
       <S.Card>
+        {/* resumo da salinha */}
+        <S.Title>🧑‍🏫 Resumo da Salinha</S.Title>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gap: "20px",
+          }}
+        >
+          <div>
+            <S.Title>Total de crianças</S.Title>
+            <Typography color="#555" align="center">
+              {students.length}
+            </Typography>
+          </div>
+          <div>
+            <S.Title>Total de ativas</S.Title>
+            <Typography color="#555" align="center">
+              {students.length}
+            </Typography>
+          </div>
+          <div>
+            <S.Title>Total liberadas</S.Title>
+            <Typography color="#555" align="center">
+              {students.length}
+            </Typography>
+          </div>
+          {/* <S.SummaryItem>
+            <S.SummaryLabel>Idade mínima:</S.SummaryLabel>
+            <S.SummaryValue>{auth.minAge} anos</S.SummaryValue>
+          </S.SummaryItem>
+          <S.SummaryItem>
+            <S.SummaryLabel>Idade máxima:</S.SummaryLabel>
+            <S.SummaryValue>{auth.maxAge} anos</S.SummaryValue>
+          </S.SummaryItem> */}
+        </div>
+      </S.Card>
+
+      <S.Card>
         <S.Title>👧 Lista de Crianças</S.Title>
 
         {loading ? (
@@ -80,20 +119,27 @@ export default function StudentList() {
                   {student.name} ({student.age} anos)
                 </S.ChildName>
                 <S.ChildInfo>Responsável: {student.guardian}</S.ChildInfo>
-                <S.ChildInfo>Telefone: {formatPhone(student.phone)}</S.ChildInfo>
+                {/* <S.ChildInfo>
+                  Telefone: {formatPhone(student.phone)}
+                </S.ChildInfo> */}
 
                 {student.releasedBy ? (
-                  <S.ReleasedBy>Retirado pelo responsável: {student.releasedBy}</S.ReleasedBy>
+                  <S.ReleasedBy>
+                    Retirado pelo responsável: {student.releasedBy}
+                  </S.ReleasedBy>
                 ) : (
                   <S.ContainerButton>
-                    <S.WhatsAppButton
-                      href={`https://wa.me/55${student.phone.replace(/\D/g, "")}?text=olá%20${encodeURIComponent(
+                    {/* <S.WhatsAppButton
+                      href={`https://wa.me/55${student.phone.replace(
+                        /\D/g,
+                        ""
+                      )}?text=olá%20${encodeURIComponent(
                         student.guardian
                       )}%2C%20por%20favor%20comparecer%20à%20salinha`}
                       target="_blank"
                     >
                       WhatsApp
-                    </S.WhatsAppButton>
+                    </S.WhatsAppButton> */}
                     <Button
                       type="button"
                       color="primary"

@@ -7,6 +7,7 @@ import client from "./client";
 import { Toaster } from "react-hot-toast";
 import ClassDetail from "./components/ClassDetail/ClassDetail";
 import { useAuth } from "./hooks/useAuth";
+import GuardianList from "./components/ListGuardians/ListGuardians";
 
 function App() {
   const auth = useAuth();
@@ -46,6 +47,7 @@ function App() {
         <Route path="/" element={<ClassDetail />} />
         <Route path="/cadastro" element={<CreateStudent />} />
         <Route path="/lista" element={<StudentList />} />
+        <Route path="/lista-responsaveis" element={<GuardianList />} />
       </Routes>
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
     </>

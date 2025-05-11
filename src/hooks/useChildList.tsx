@@ -4,33 +4,35 @@ export const useChildList = () => {
   const getChildren = async (classId: number) => {
     const { data, error } = await client
       .from("child")
-      .select(`
-        id,
-        name,
-        age,
-        released_by,
-        guardian (
+      .select(
+        `
+          id,
           name,
-          phone
-        )
-      `)
+          age,
+          guardian_child (
+            guardian (
+              id,
+              name,
+              phone
+            )
+          )
+        `
+      )
       .eq("class_id", classId);
 
-    console.log("🔍 Supabase data:", data);
-
     if (error) {
-      console.error("Erro ao buscar crianças:", error.message);
-      throw error;
+      console.error("Erro ao buscar crianças e responsáveis:", error);
+    } else {
+      console.log("Crianças com responsáveis:", data);
+      return data.map((child) => ({
+        ...child,
+        guardian_child: child.guardian_child.map((gc) => ({
+          id: gc.guardian.id,
+          name: gc.guardian.name,
+          phone: gc.guardian.phone,
+        })),
+      }));
     }
-
-    return data.map((c: any) => ({
-      id: c.id,
-      name: c.name,
-      age: c.age,
-      guardian: c.guardian?.name || "N/A",
-      phone: c.guardian?.phone || "",
-      releasedBy: c.released_by || undefined,
-    }));
   };
 
   const releaseChild = async (id: number, releasedBy: string) => {

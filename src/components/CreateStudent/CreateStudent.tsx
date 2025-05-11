@@ -159,7 +159,8 @@ export default function CreateStudent() {
             color="secondary"
             size="md"
             style={{ width: "100%", marginTop: "12px" }}
-            onClick={() => navigate("/lista")}
+            onClick={() => navigate("/lista-responsaveis")}
+            // onClick={() => navigate("/lista")}
           >
             Ver Lista de Crianças
           </Button>

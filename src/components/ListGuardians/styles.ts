@@ -8,9 +8,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   font-family: 'Segoe UI', sans-serif;
-  gap: 20px;
 `;
 
 export const Card = styled.div`
