@@ -116,7 +116,7 @@ export default function StudentList() {
               color: white;
               font-size: 8px;
               font-weight: bold;
-                         ">🧒</div>
+            ">🧒</div>
             <div style="
               font-size: 12px; 
               font-weight: bold; 
@@ -221,13 +221,43 @@ export default function StudentList() {
       // Remover elemento temporário
       document.body.removeChild(tempDiv);
 
-      // Criar link de download
-      const link = document.createElement('a');
-      link.download = `adesivo_${student.name.replace(/\s+/g, '_')}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      // Converter canvas para blob
+      canvas.toBlob(async (blob) => {
+        if (blob) {
+          // Criar arquivo
+          const file = new File([blob], `adesivo_${student.name.replace(/\s+/g, '_')}.png`, {
+            type: 'image/png'
+          });
 
-      toast.success('Adesivo baixado! Envie para o app da Niimbot');
+          // Verificar se o navegador suporta Web Share API
+          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({
+                title: `Adesivo - ${student.name}`,
+                text: `Adesivo da criança ${student.name} para impressão`,
+                files: [file]
+              });
+              toast.success('Adesivo compartilhado! Salve na galeria');
+            } catch (error) {
+              console.error('Erro ao compartilhar:', error);
+              // Fallback para download se compartilhamento falhar
+              const link = document.createElement('a');
+              link.download = `adesivo_${student.name.replace(/\s+/g, '_')}.png`;
+              link.href = canvas.toDataURL('image/png');
+              link.click();
+              toast.success('Adesivo baixado! Salve na galeria');
+            }
+          } else {
+            // Fallback para navegadores que não suportam Web Share API
+            const link = document.createElement('a');
+            link.download = `adesivo_${student.name.replace(/\s+/g, '_')}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            toast.success('Adesivo baixado! Salve na galeria');
+          }
+        }
+      }, 'image/png');
+
     } catch (error) {
       console.error('Erro ao gerar adesivo:', error);
       toast.error('Erro ao gerar adesivo');
@@ -286,7 +316,7 @@ export default function StudentList() {
                       style={{ flex: 1, padding: "10px" }}
                       onClick={() => setModalId(student.id)}
                     >
-                      📱 Baixar Adesivo
+                      📱 Salvar na Galeria
                     </Button>
                   </S.ContainerButton>
                 )}
@@ -306,7 +336,7 @@ export default function StudentList() {
                     }}
                     onClick={() => downloadStickerImage(student)}
                   >
-                    📱 Baixar Adesivo
+                    📱 Salvar na Galeria
                   </Button>
                 </S.ContainerButton>
               </S.ChildCard>
