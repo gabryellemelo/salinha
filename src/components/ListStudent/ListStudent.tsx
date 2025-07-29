@@ -83,31 +83,118 @@ export default function StudentList() {
         <div style="
           width: 200px; 
           height: 120px; 
-          border: 2px solid #000;
+          border: 2px solid #4A90E2;
+          border-radius: 8px;
           padding: 8px;
           font-family: Arial, sans-serif;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          background: white;
+          background: linear-gradient(135deg, #E3F2FD 0%, #FFFFFF 100%);
           margin: 0;
           box-sizing: border-box;
+          position: relative;
+          overflow: hidden;
         ">
-          <div style="font-size: 14px; font-weight: bold; margin-bottom: 4px; color: #000; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;">
-            ${student.name}
+          <!-- Header com ícone -->
+          <div style="
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #4A90E2;
+          ">
+            <div style="
+              width: 16px;
+              height: 16px;
+              background: #4A90E2;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: white;
+              font-size: 8px;
+              font-weight: bold;
+            ">👶</div>
+            <div style="
+              font-size: 12px; 
+              font-weight: bold; 
+              color: #2C3E50; 
+              text-transform: uppercase; 
+              letter-spacing: 0.5px; 
+              line-height: 1.2;
+              flex: 1;
+            ">${student.name}</div>
+            <div style="
+              background: #4A90E2;
+              color: white;
+              padding: 2px 6px;
+              border-radius: 10px;
+              font-size: 8px;
+              font-weight: bold;
+            ">${student.age} anos</div>
           </div>
-          <div style="font-size: 10px; color: #000; font-weight: normal; margin-bottom: 4px;">
-            ${student.age} anos
+
+          <!-- Informações principais -->
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 3px;">
+            <div style="
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              font-size: 9px;
+              color: #34495E;
+            ">
+              <span style="color: #4A90E2; font-weight: bold;">👤</span>
+              <span style="font-weight: bold;">${student.guardian}</span>
+            </div>
+            
+            <div style="
+              display: flex;
+              align-items: center;
+              gap: 4px;
+              font-size: 8px;
+              color: #34495E;
+            ">
+              <span style="color: #4A90E2; font-weight: bold;">📞</span>
+              <span>${formatPhone(student.phone)}</span>
+            </div>
           </div>
-          <div style="font-weight: bold; color: #000; font-size: 10px; margin-bottom: 2px;">
-            ${student.guardian}
-          </div>
-          <div style="color: #000; font-size: 9px; margin-bottom: 4px;">
-            ${formatPhone(student.phone)}
-          </div>
-          ${student.intolerances_restrictions ? `<div style="color: #000; font-size: 8px; font-style: italic; line-height: 1.2; margin-top: 4px; border-top: 1px solid #ccc; padding-top: 4px;">${student.intolerances_restrictions}</div>` : ""}
-          <div style="color: #000; font-size: 8px; font-style: italic; line-height: 1.2; margin-top: 4px; text-align: center;">
-            ${student.image_authorization ? "✓ Autorizado" : "✗ Nao autorizado"}
+
+          <!-- Observações (se houver) -->
+          ${student.intolerances_restrictions ? `
+            <div style="
+              background: #FFF3E0;
+              border-left: 3px solid #FF9800;
+              padding: 3px 6px;
+              margin: 4px 0;
+              border-radius: 0 4px 4px 0;
+              font-size: 7px;
+              color: #E65100;
+              font-style: italic;
+              line-height: 1.2;
+            ">
+              <span style="font-weight: bold;">⚠️</span> ${student.intolerances_restrictions}
+            </div>
+          ` : ""}
+
+          <!-- Status de autorização -->
+          <div style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            padding: 3px;
+            border-radius: 4px;
+            font-size: 8px;
+            font-weight: bold;
+            ${student.image_authorization 
+              ? 'background: #E8F5E8; color: #2E7D32; border: 1px solid #4CAF50;' 
+              : 'background: #FFEBEE; color: #C62828; border: 1px solid #F44336;'
+            }
+          ">
+            <span>${student.image_authorization ? '✅' : '❌'}</span>
+            <span>${student.image_authorization ? 'AUTORIZADO' : 'NÃO AUTORIZADO'}</span>
           </div>
         </div>
       `;
