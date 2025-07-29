@@ -87,8 +87,8 @@ export default function StudentList() {
             @media print {
               body { margin: 0; padding: 0; }
               .sticker { 
-                width: 40mm; 
-                height: 40mm; 
+                width: 50mm; 
+                height: 30mm; 
                 border: 2px solid #333;
                 border-radius: 8px;
                 padding: 4mm;
@@ -109,7 +109,7 @@ export default function StudentList() {
                 border: 1px solid #dee2e6;
               }
               .name { 
-                font-size: 14px; 
+                font-size: 12px; 
                 font-weight: bold; 
                 margin-bottom: 1mm; 
                 color: #212529;
@@ -117,17 +117,17 @@ export default function StudentList() {
                 letter-spacing: 0.8px;
               }
               .age { 
-                font-size: 10px; 
+                font-size: 9px; 
                 color: #666;
                 font-weight: 400;
-                margin-bottom: 2mm;
+                margin-bottom: 1.5mm;
               }
               .content {
                 flex: 1;
                 display: flex;
                 flex-direction: column;
-                gap: 2mm;
-                padding: 1mm 0;
+                gap: 1.5mm;
+                padding: 0.5mm 0;
               }
               .info-row {
                 display: flex;
@@ -135,52 +135,52 @@ export default function StudentList() {
                 gap: 1mm;
               }
               .label {
-                font-size: 8px;
+                font-size: 7px;
                 color: #6c757d;
                 font-weight: 600;
                 text-transform: uppercase;
-                min-width: 12mm;
+                min-width: 10mm;
               }
               .value {
-                font-size: 9px;
+                font-size: 8px;
                 color: #212529;
                 font-weight: 500;
               }
               .guardian { 
                 font-weight: bold; 
                 color: #495057;
-                font-size: 10px;
+                font-size: 9px;
               }
               .phone { 
                 color: #6c757d;
-                font-size: 9px;
+                font-size: 8px;
               }
               .observation {
                 color: #495057;
-                font-size: 8px;
+                font-size: 7px;
                 font-style: italic;
-                line-height: 1.3;
-                margin-top: 2mm;
-                padding: 2mm;
+                line-height: 1.2;
+                margin-top: 1.5mm;
+                padding: 1.5mm;
                 background: #f8f9fa;
-                border-radius: 4px;
-                border-left: 3px solid #dee2e6;
+                border-radius: 3px;
+                border-left: 2px solid #dee2e6;
               }
               .image-auth {
                 color: #495057;
-                font-size: 8px;
+                font-size: 7px;
                 font-style: italic;
-                line-height: 1.3;
+                line-height: 1.2;
                 margin-top: 1mm;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                gap: 2px;
+                gap: 1px;
               }
             }
             .sticker { 
-              width: 40mm; 
-              height: 40mm; 
+              width: 50mm; 
+              height: 30mm; 
               border: 2px solid #333;
               border-radius: 8px;
               padding: 4mm;
@@ -200,7 +200,7 @@ export default function StudentList() {
               border: 1px solid #dee2e6;
             }
             .name { 
-              font-size: 14px; 
+              font-size: 12px; 
               font-weight: bold; 
               margin-bottom: 1mm; 
               color: #212529;
@@ -208,17 +208,17 @@ export default function StudentList() {
               letter-spacing: 0.8px;
             }
             .age { 
-              font-size: 10px; 
+              font-size: 9px; 
               color: #666;
               font-weight: 400;
-              margin-bottom: 2mm;
+              margin-bottom: 1.5mm;
             }
             .content {
               flex: 1;
               display: flex;
               flex-direction: column;
-              gap: 2mm;
-              padding: 1mm 0;
+              gap: 1.5mm;
+              padding: 0.5mm 0;
             }
             .info-row {
               display: flex;
@@ -226,47 +226,47 @@ export default function StudentList() {
               gap: 1mm;
             }
             .label {
-              font-size: 8px;
+              font-size: 7px;
               color: #6c757d;
               font-weight: 600;
               text-transform: uppercase;
-              min-width: 12mm;
+              min-width: 10mm;
             }
             .value {
-              font-size: 9px;
+              font-size: 8px;
               color: #212529;
               font-weight: 500;
             }
             .guardian { 
               font-weight: bold; 
               color: #495057;
-              font-size: 10px;
+              font-size: 9px;
             }
             .phone { 
               color: #6c757d;
-              font-size: 9px;
+              font-size: 8px;
             }
             .observation {
               color: #495057;
-              font-size: 8px;
+              font-size: 7px;
               font-style: italic;
-              line-height: 1.3;
-              margin-top: 2mm;
-              padding: 2mm;
+              line-height: 1.2;
+              margin-top: 1.5mm;
+              padding: 1.5mm;
               background: #f8f9fa;
-              border-radius: 4px;
-              border-left: 3px solid #dee2e6;
+              border-radius: 3px;
+              border-left: 2px solid #dee2e6;
             }
             .image-auth {
               color: #495057;
-              font-size: 8px;
+              font-size: 7px;
               font-style: italic;
-              line-height: 1.3;
+              line-height: 1.2;
               margin-top: 1mm;
               display: flex;
               align-items: center;
               justify-content: center;
-              gap: 2px;
+              gap: 1px;
             }
           </style>
         </head>
