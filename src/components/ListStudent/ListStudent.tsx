@@ -316,7 +316,7 @@ export default function StudentList() {
                       style={{ flex: 1, padding: "10px" }}
                       onClick={() => setModalId(student.id)}
                     >
-                      📱 Salvar na Galeria
+                      Liberar
                     </Button>
                   </S.ContainerButton>
                 )}
@@ -336,7 +336,7 @@ export default function StudentList() {
                     }}
                     onClick={() => downloadStickerImage(student)}
                   >
-                    📱 Salvar na Galeria
+                    📱 Baixar etiqueta
                   </Button>
                 </S.ContainerButton>
               </S.ChildCard>
