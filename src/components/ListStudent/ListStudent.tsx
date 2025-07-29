@@ -85,188 +85,66 @@ export default function StudentList() {
           <title>Adesivo - ${student.name}</title>
           <style>
             @media print {
-              body { margin: 0; padding: 0; }
+              body { 
+                margin: 0; 
+                padding: 0; 
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+              }
               .sticker { 
                 width: 50mm; 
                 height: 30mm; 
-                border: 2px solid #333;
-                border-radius: 8px;
-                padding: 4mm;
-                font-family: 'Segoe UI', Arial, sans-serif;
+                border: 1px solid #000;
+                border-radius: 0;
+                padding: 2mm;
+                font-family: Arial, sans-serif;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
-                page-break-after: always;
                 background: white;
-                box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-              }
-              .header {
-                text-align: center;
-                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-                border-radius: 6px;
-                padding: 2mm;
-                margin-bottom: 2mm;
-                border: 1px solid #dee2e6;
+                box-shadow: none;
+                margin: 0;
               }
               .name { 
-                font-size: 12px; 
+                font-size: 11px; 
                 font-weight: bold; 
                 margin-bottom: 1mm; 
-                color: #212529;
+                color: #000;
                 text-transform: uppercase;
-                letter-spacing: 0.8px;
+                letter-spacing: 0.5px;
               }
               .age { 
-                font-size: 9px; 
-                color: #666;
-                font-weight: 400;
-                margin-bottom: 1.5mm;
-              }
-              .content {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                gap: 1.5mm;
-                padding: 0.5mm 0;
-              }
-              .info-row {
-                display: flex;
-                align-items: center;
-                gap: 1mm;
-              }
-              .label {
-                font-size: 7px;
-                color: #6c757d;
-                font-weight: 600;
-                text-transform: uppercase;
-                min-width: 10mm;
-              }
-              .value {
-                font-size: 8px;
-                color: #212529;
-                font-weight: 500;
+                font-size: 8px; 
+                color: #000;
+                font-weight: normal;
+                margin-bottom: 1mm;
               }
               .guardian { 
                 font-weight: bold; 
-                color: #495057;
-                font-size: 9px;
-              }
-              .phone { 
-                color: #6c757d;
+                color: #000;
                 font-size: 8px;
               }
-              .observation {
-                color: #495057;
+              .phone { 
+                color: #000;
                 font-size: 7px;
-                font-style: italic;
-                line-height: 1.2;
-                margin-top: 1.5mm;
-                padding: 1.5mm;
-                background: #f8f9fa;
-                border-radius: 3px;
-                border-left: 2px solid #dee2e6;
               }
-              .image-auth {
-                color: #495057;
-                font-size: 7px;
+              .observation {
+                color: #000;
+                font-size: 6px;
                 font-style: italic;
                 line-height: 1.2;
                 margin-top: 1mm;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 1px;
+                border-top: 1px solid #ccc;
+                padding-top: 1mm;
               }
-            }
-            .sticker { 
-              width: 50mm; 
-              height: 30mm; 
-              border: 2px solid #333;
-              border-radius: 8px;
-              padding: 4mm;
-              font-family: 'Segoe UI', Arial, sans-serif;
-              display: flex;
-              flex-direction: column;
-              justify-content: space-between;
-              background: white;
-              box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-            }
-            .header {
-              text-align: center;
-              background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-              border-radius: 6px;
-              padding: 2mm;
-              margin-bottom: 2mm;
-              border: 1px solid #dee2e6;
-            }
-            .name { 
-              font-size: 12px; 
-              font-weight: bold; 
-              margin-bottom: 1mm; 
-              color: #212529;
-              text-transform: uppercase;
-              letter-spacing: 0.8px;
-            }
-            .age { 
-              font-size: 9px; 
-              color: #666;
-              font-weight: 400;
-              margin-bottom: 1.5mm;
-            }
-            .content {
-              flex: 1;
-              display: flex;
-              flex-direction: column;
-              gap: 1.5mm;
-              padding: 0.5mm 0;
-            }
-            .info-row {
-              display: flex;
-              align-items: center;
-              gap: 1mm;
-            }
-            .label {
-              font-size: 7px;
-              color: #6c757d;
-              font-weight: 600;
-              text-transform: uppercase;
-              min-width: 10mm;
-            }
-            .value {
-              font-size: 8px;
-              color: #212529;
-              font-weight: 500;
-            }
-            .guardian { 
-              font-weight: bold; 
-              color: #495057;
-              font-size: 9px;
-            }
-            .phone { 
-              color: #6c757d;
-              font-size: 8px;
-            }
-            .observation {
-              color: #495057;
-              font-size: 7px;
-              font-style: italic;
-              line-height: 1.2;
-              margin-top: 1.5mm;
-              padding: 1.5mm;
-              background: #f8f9fa;
-              border-radius: 3px;
-              border-left: 2px solid #dee2e6;
-            }
-            .image-auth {
-              color: #495057;
-              font-size: 7px;
-              font-style: italic;
-              line-height: 1.2;
-              margin-top: 1mm;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              gap: 1px;
+              .image-auth {
+                color: #000;
+                font-size: 6px;
+                font-style: italic;
+                line-height: 1.2;
+                margin-top: 1mm;
+                text-align: center;
+              }
             }
           </style>
         </head>
@@ -278,7 +156,7 @@ export default function StudentList() {
             <div class="phone">${formatPhone(student.phone)}</div>
             ${student.intolerances_restrictions ? `<div class="observation">${student.intolerances_restrictions}</div>` : ""}
             <div class="image-auth">
-              ${student.image_authorization ? "✅ Imagens autorizadas" : "❌ Sem autorização"}
+              ${student.image_authorization ? "✓ Autorizado" : "✗ Nao autorizado"}
             </div>
           </div>
         </body>
