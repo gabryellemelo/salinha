@@ -81,32 +81,32 @@ export default function StudentList() {
       // Criar elemento temporário para renderizar o adesivo
       const stickerHTML = `
         <div style="
-          width: 50mm; 
-          height: 30mm; 
-          border: 1px solid #000;
-          padding: 2mm;
+          width: 200px; 
+          height: 120px; 
+          border: 2px solid #000;
+          padding: 8px;
           font-family: Arial, sans-serif;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           background: white;
           margin: 0;
-          font-size: 12px;
+          box-sizing: border-box;
         ">
-          <div style="font-size: 11px; font-weight: bold; margin-bottom: 1mm; color: #000; text-transform: uppercase; letter-spacing: 0.5px;">
+          <div style="font-size: 14px; font-weight: bold; margin-bottom: 4px; color: #000; text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2;">
             ${student.name}
           </div>
-          <div style="font-size: 8px; color: #000; font-weight: normal; margin-bottom: 1mm;">
+          <div style="font-size: 10px; color: #000; font-weight: normal; margin-bottom: 4px;">
             ${student.age} anos
           </div>
-          <div style="font-weight: bold; color: #000; font-size: 8px;">
+          <div style="font-weight: bold; color: #000; font-size: 10px; margin-bottom: 2px;">
             ${student.guardian}
           </div>
-          <div style="color: #000; font-size: 7px;">
+          <div style="color: #000; font-size: 9px; margin-bottom: 4px;">
             ${formatPhone(student.phone)}
           </div>
-          ${student.intolerances_restrictions ? `<div style="color: #000; font-size: 6px; font-style: italic; line-height: 1.2; margin-top: 1mm; border-top: 1px solid #ccc; padding-top: 1mm;">${student.intolerances_restrictions}</div>` : ""}
-          <div style="color: #000; font-size: 6px; font-style: italic; line-height: 1.2; margin-top: 1mm; text-align: center;">
+          ${student.intolerances_restrictions ? `<div style="color: #000; font-size: 8px; font-style: italic; line-height: 1.2; margin-top: 4px; border-top: 1px solid #ccc; padding-top: 4px;">${student.intolerances_restrictions}</div>` : ""}
+          <div style="color: #000; font-size: 8px; font-style: italic; line-height: 1.2; margin-top: 4px; text-align: center;">
             ${student.image_authorization ? "✓ Autorizado" : "✗ Nao autorizado"}
           </div>
         </div>
@@ -122,12 +122,13 @@ export default function StudentList() {
 
       // Converter para imagem
       const canvas = await html2canvas(tempDiv.firstElementChild as HTMLElement, {
-        width: 189, // 50mm em pixels (50 * 3.78)
-        height: 113, // 30mm em pixels (30 * 3.78)
+        width: 200,
+        height: 120,
         scale: 2, // Melhor qualidade
         backgroundColor: '#ffffff',
         useCORS: true,
-        allowTaint: true
+        allowTaint: true,
+        logging: false
       });
 
       // Remover elemento temporário
