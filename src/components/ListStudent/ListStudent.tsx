@@ -116,7 +116,7 @@ export default function StudentList() {
               color: white;
               font-size: 8px;
               font-weight: bold;
-            ">👶</div>
+                         ">🧒</div>
             <div style="
               font-size: 12px; 
               font-weight: bold; 
