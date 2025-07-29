@@ -173,6 +173,7 @@ export default function StudentList() {
               color: #E65100;
               font-style: italic;
               line-height: 1.2;
+              font-weight: bold;
             ">
               <span style="font-weight: bold;">⚠️</span> ${student.intolerances_restrictions}
             </div>
