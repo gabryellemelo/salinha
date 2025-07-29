@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useChildList } from "../../hooks/useChildList";
+import { useSessionStore } from "../../store/useSessionStore";
+import { useAuth } from "../../hooks/useAuth";
 import * as S from "./styles";
 import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import Modal from "../Modal/Modal";
-import { useAuth } from "../../hooks/useAuth";
-import { useSessionStore } from "../../store/useSessionStore";
+import toast from "react-hot-toast";
+import html2canvas from "html2canvas";
 
 type Student = {
   id: number;
@@ -36,6 +38,11 @@ export default function StudentList() {
       date.getMonth() === today.getMonth() &&
       date.getDate() === today.getDate()
     );
+  };
+
+  const formatPhone = (phone: string) => {
+    const digits = phone.replace(/\D/g, "");
+    return digits.replace(/^(\d{2})(\d{5})(\d{4}).*/, "$1 $2-$3");
   };
 
   const fetchStudents = async () => {
@@ -69,108 +76,74 @@ export default function StudentList() {
     }
   };
 
-  const formatPhone = (phone: string) => {
-    const digits = phone.replace(/\D/g, "");
-    return digits.replace(/^(\d{2})(\d{5})(\d{4}).*/, "$1 $2-$3");
-  };
-
-  const printSticker = (student: Student) => {
-    const printWindow = window.open('', '_blank', 'width=400,height=300');
-    if (!printWindow) return;
-
-    const stickerContent = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Adesivo - ${student.name}</title>
-          <style>
-            @media print {
-              body { 
-                margin: 0; 
-                padding: 0; 
-                -webkit-print-color-adjust: exact;
-                color-adjust: exact;
-              }
-              .sticker { 
-                width: 50mm; 
-                height: 30mm; 
-                border: 1px solid #000;
-                border-radius: 0;
-                padding: 2mm;
-                font-family: Arial, sans-serif;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                background: white;
-                box-shadow: none;
-                margin: 0;
-              }
-              .name { 
-                font-size: 11px; 
-                font-weight: bold; 
-                margin-bottom: 1mm; 
-                color: #000;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-              }
-              .age { 
-                font-size: 8px; 
-                color: #000;
-                font-weight: normal;
-                margin-bottom: 1mm;
-              }
-              .guardian { 
-                font-weight: bold; 
-                color: #000;
-                font-size: 8px;
-              }
-              .phone { 
-                color: #000;
-                font-size: 7px;
-              }
-              .observation {
-                color: #000;
-                font-size: 6px;
-                font-style: italic;
-                line-height: 1.2;
-                margin-top: 1mm;
-                border-top: 1px solid #ccc;
-                padding-top: 1mm;
-              }
-              .image-auth {
-                color: #000;
-                font-size: 6px;
-                font-style: italic;
-                line-height: 1.2;
-                margin-top: 1mm;
-                text-align: center;
-              }
-            }
-          </style>
-        </head>
-        <body>
-          <div class="sticker">
-            <div class="name">${student.name}</div>
-            <div class="age">${student.age} anos</div>
-            <div class="guardian">${student.guardian}</div>
-            <div class="phone">${formatPhone(student.phone)}</div>
-            ${student.intolerances_restrictions ? `<div class="observation">${student.intolerances_restrictions}</div>` : ""}
-            <div class="image-auth">
-              ${student.image_authorization ? "✓ Autorizado" : "✗ Nao autorizado"}
-            </div>
+  const downloadStickerImage = async (student: Student) => {
+    try {
+      // Criar elemento temporário para renderizar o adesivo
+      const stickerHTML = `
+        <div style="
+          width: 50mm; 
+          height: 30mm; 
+          border: 1px solid #000;
+          padding: 2mm;
+          font-family: Arial, sans-serif;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          background: white;
+          margin: 0;
+          font-size: 12px;
+        ">
+          <div style="font-size: 11px; font-weight: bold; margin-bottom: 1mm; color: #000; text-transform: uppercase; letter-spacing: 0.5px;">
+            ${student.name}
           </div>
-        </body>
-      </html>
-    `;
+          <div style="font-size: 8px; color: #000; font-weight: normal; margin-bottom: 1mm;">
+            ${student.age} anos
+          </div>
+          <div style="font-weight: bold; color: #000; font-size: 8px;">
+            ${student.guardian}
+          </div>
+          <div style="color: #000; font-size: 7px;">
+            ${formatPhone(student.phone)}
+          </div>
+          ${student.intolerances_restrictions ? `<div style="color: #000; font-size: 6px; font-style: italic; line-height: 1.2; margin-top: 1mm; border-top: 1px solid #ccc; padding-top: 1mm;">${student.intolerances_restrictions}</div>` : ""}
+          <div style="color: #000; font-size: 6px; font-style: italic; line-height: 1.2; margin-top: 1mm; text-align: center;">
+            ${student.image_authorization ? "✓ Autorizado" : "✗ Nao autorizado"}
+          </div>
+        </div>
+      `;
 
-    printWindow.document.write(stickerContent);
-    printWindow.document.close();
-    printWindow.focus();
-    
-    setTimeout(() => {
-      printWindow.print();
-      printWindow.close();
-    }, 500);
+      // Criar elemento temporário
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = stickerHTML;
+      tempDiv.style.position = 'absolute';
+      tempDiv.style.left = '-9999px';
+      tempDiv.style.top = '-9999px';
+      document.body.appendChild(tempDiv);
+
+      // Converter para imagem
+      const canvas = await html2canvas(tempDiv.firstElementChild as HTMLElement, {
+        width: 189, // 50mm em pixels (50 * 3.78)
+        height: 113, // 30mm em pixels (30 * 3.78)
+        scale: 2, // Melhor qualidade
+        backgroundColor: '#ffffff',
+        useCORS: true,
+        allowTaint: true
+      });
+
+      // Remover elemento temporário
+      document.body.removeChild(tempDiv);
+
+      // Criar link de download
+      const link = document.createElement('a');
+      link.download = `adesivo_${student.name.replace(/\s+/g, '_')}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+
+      toast.success('Adesivo baixado! Envie para o app da Niimbot');
+    } catch (error) {
+      console.error('Erro ao gerar adesivo:', error);
+      toast.error('Erro ao gerar adesivo');
+    }
   };
 
   return (
@@ -225,7 +198,7 @@ export default function StudentList() {
                       style={{ flex: 1, padding: "10px" }}
                       onClick={() => setModalId(student.id)}
                     >
-                      Liberar
+                      📱 Baixar Adesivo
                     </Button>
                   </S.ContainerButton>
                 )}
@@ -243,9 +216,9 @@ export default function StudentList() {
                       borderColor: "#FFB6C1",
                       color: "white"
                     }}
-                    onClick={() => printSticker(student)}
+                    onClick={() => downloadStickerImage(student)}
                   >
-                    🏷️ Imprimir Adesivo
+                    📱 Baixar Adesivo
                   </Button>
                 </S.ContainerButton>
               </S.ChildCard>
