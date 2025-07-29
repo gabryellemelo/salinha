@@ -169,9 +169,8 @@ export default function StudentList() {
               padding: 3px 6px;
               margin: 4px 0;
               border-radius: 0 4px 4px 0;
-              font-size: 7px;
+              font-size: 8px;
               color: #E65100;
-              font-style: italic;
               line-height: 1.2;
               font-weight: bold;
             ">
