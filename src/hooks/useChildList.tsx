@@ -8,6 +8,8 @@ export const useChildList = () => {
         id,
         name,
         age,
+        intolerances_restrictions,
+        image_authorization,
         released_by,
         guardian (
           name,
@@ -15,8 +17,6 @@ export const useChildList = () => {
         )
       `)
       .eq("class_id", classId);
-
-    console.log("🔍 Supabase data:", data);
 
     if (error) {
       console.error("Erro ao buscar crianças:", error.message);
@@ -27,6 +27,8 @@ export const useChildList = () => {
       id: c.id,
       name: c.name,
       age: c.age,
+      intolerances_restrictions: c.intolerances_restrictions || "",
+      image_authorization: c.image_authorization || false,
       guardian: c.guardian?.name || "N/A",
       phone: c.guardian?.phone || "",
       releasedBy: c.released_by || undefined,

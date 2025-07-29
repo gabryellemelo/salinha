@@ -7,7 +7,7 @@ import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { useStudent } from "../../hooks/useStudent";
 import toast from "react-hot-toast";
-import { useClassStore } from "../../store/useClassStore";
+import { useSessionStore } from "../../store/useSessionStore";
 
 export default function CreateStudent() {
   const [formData, setFormData] = useState({
@@ -15,14 +15,43 @@ export default function CreateStudent() {
     age: "",
     responsible: "",
     telephone: "",
+    intolerances_restrictions: "",
+    image_authorization: false,
   });
 
   const navigate = useNavigate();
   const { createStudent } = useStudent();
-  const { classId } = useClassStore();
+  const { classId } = useSessionStore();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  console.log("CreateStudent - classId:", classId);
+
+  if (!classId) {
+    return (
+      <S.Container>
+        <S.CardContainer>
+          <S.Icon src={Ball} alt="Bola colorida" />
+          <Typography align="center" size="22px" weight="bold" margin="0 0 16px">
+            Turma não selecionada
+          </Typography>
+          <Typography align="center" size="14px" color="#555" margin="0 0 24px">
+            Por favor, selecione uma turma primeiro.
+          </Typography>
+          <Button
+            type="button"
+            color="primary"
+            size="md"
+            style={{ width: "100%" }}
+            onClick={() => navigate("/")}
+          >
+            Voltar para Seleção de Turma
+          </Button>
+        </S.CardContainer>
+      </S.Container>
+    );
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     if (name === "telephone") {
@@ -47,10 +76,15 @@ export default function CreateStudent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { name, age, responsible, telephone } = formData;
+    const { name, age, responsible, telephone, intolerances_restrictions, image_authorization } = formData;
 
     if (!name || !age || !responsible || !telephone) {
-      toast.error("Preencha todos os campos");
+      toast.error("Preencha todos os campos obrigatórios");
+      return;
+    }
+
+    if (image_authorization === undefined) {
+      toast.error("Selecione uma opção para autorização de imagens");
       return;
     }
 
@@ -67,6 +101,8 @@ export default function CreateStudent() {
         age: age,
         responsible,
         telephone,
+        intolerances_restrictions,
+        image_authorization,
         class_id: classId,
       });
 
@@ -77,6 +113,8 @@ export default function CreateStudent() {
         age: "",
         responsible: "",
         telephone: "",
+        intolerances_restrictions: "",
+        image_authorization: false,
       });
     } catch (error) {
       console.error(error);
@@ -102,8 +140,8 @@ export default function CreateStudent() {
           margin="0 0 24px"
           lineHeight="1.5"
         >
-          “Ensina a criança no caminho em que deve andar, <br />
-          e mesmo quando envelhecer não se desviará dele.” <br />
+          "Ensina a criança no caminho em que deve andar, <br />
+          e mesmo quando envelhecer não se desviará dele." <br />
           <em>Provérbios 22:6</em>
         </Typography>
 
@@ -139,9 +177,68 @@ export default function CreateStudent() {
               type="tel"
               value={formData.telephone}
               onChange={handleChange}
-              style={{ marginBottom: "20px" }}
               autoComplete="off"
             />
+            <Input
+              name="intolerances_restrictions"
+              placeholder="Intolerâncias/Restrições (opcional)"
+              type="text"
+              value={formData.intolerances_restrictions}
+              onChange={handleChange}
+              autoComplete="off"
+            />
+            
+            <div style={{ marginTop: "16px" }}>
+              <Typography size="14px" weight="bold" margin="0 0 8px">
+                Autorização de Imagens:
+              </Typography>
+              <div style={{ display: "flex", gap: "12px" }}>
+                <label style={{ 
+                  display: "flex", 
+                  alignItems: "center", 
+                  gap: "8px", 
+                  cursor: "pointer",
+                  padding: "8px 16px",
+                  border: "2px solid #e1e5e9",
+                  borderRadius: "8px",
+                  backgroundColor: formData.image_authorization === true ? "#4CAF50" : "white",
+                  color: formData.image_authorization === true ? "white" : "#333",
+                  transition: "all 0.2s ease"
+                }}>
+                  <input
+                    type="radio"
+                    name="image_authorization"
+                    value="true"
+                    checked={formData.image_authorization === true}
+                    onChange={() => setFormData(prev => ({ ...prev, image_authorization: true }))}
+                    style={{ display: "none" }}
+                  />
+                  <span style={{ fontWeight: "500" }}>Sim</span>
+                </label>
+                <label style={{ 
+                  display: "flex", 
+                  alignItems: "center", 
+                  gap: "8px", 
+                  cursor: "pointer",
+                  padding: "8px 16px",
+                  border: "2px solid #e1e5e9",
+                  borderRadius: "8px",
+                  backgroundColor: formData.image_authorization === false ? "#f44336" : "white",
+                  color: formData.image_authorization === false ? "white" : "#333",
+                  transition: "all 0.2s ease"
+                }}>
+                  <input
+                    type="radio"
+                    name="image_authorization"
+                    value="false"
+                    checked={formData.image_authorization === false}
+                    onChange={() => setFormData(prev => ({ ...prev, image_authorization: false }))}
+                    style={{ display: "none" }}
+                  />
+                  <span style={{ fontWeight: "500" }}>Não</span>
+                </label>
+              </div>
+            </div>
           </S.InputContainer>
 
           <Button

@@ -7,7 +7,7 @@ import Button from "../ui/Button";
 import toast from "react-hot-toast";
 import client from "../../client";
 import { useAuth } from "../../hooks/useAuth";
-import { useClassStore } from "../../store/useClassStore";
+import { useSessionStore } from "../../store/useSessionStore";
 
 interface IClassDetail {
   schedule: {
@@ -25,7 +25,7 @@ interface IClassDetail {
 export default function ClassDetail() {
   const auth = useAuth();
   const navigate = useNavigate();
-  const { setClassId } = useClassStore();
+  const { setSession } = useSessionStore();
   const [isLoading, setIsLoading] = useState(false);
   const [classes, setClasses] = useState<IClassDetail[]>([]);
 
@@ -127,7 +127,11 @@ export default function ClassDetail() {
                   size="md"
                   style={{ width: "100%", marginTop: 20 }}
                   onClick={() => {
-                    setClassId(Number(item.schedule.class.id));
+                    setSession(
+                      Number(item.schedule.id),
+                      Number(item.schedule.class.id),
+                      item.schedule.datetime
+                    );
                     navigate("/cadastro");
                   }}
                 >
