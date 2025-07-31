@@ -83,7 +83,7 @@ export default function StudentList() {
         <div style="
           width: 200px; 
           height: 120px; 
-          border: 2px solid #4A90E2;
+          border: none;
           border-radius: 8px;
           padding: 8px;
           font-family: Arial, sans-serif;
@@ -103,17 +103,15 @@ export default function StudentList() {
             gap: 6px;
             margin-bottom: 4px;
             padding-bottom: 4px;
-            border-bottom: 1px solid #4A90E2;
+            border-bottom: none;
           ">
             <div style="
               width: 16px;
               height: 16px;
-              background: #4A90E2;
-              border-radius: 50%;
               display: flex;
               align-items: center;
               justify-content: center;
-              color: white;
+              color: #2C3E50;
               font-size: 8px;
               font-weight: bold;
             ">🧒</div>
@@ -127,10 +125,8 @@ export default function StudentList() {
               flex: 1;
             ">${student.name}</div>
             <div style="
-              background: #4A90E2;
-              color: white;
+              color: #2C3E50;
               padding: 2px 6px;
-              border-radius: 10px;
               font-size: 8px;
               font-weight: bold;
             ">${student.age} anos</div>
@@ -164,13 +160,12 @@ export default function StudentList() {
           <!-- Observações (se houver) -->
           ${student.intolerances_restrictions ? `
             <div style="
-              background: #FFF3E0;
-              border-left: 3px solid #FF9800;
+              border-left: 3px solid #000;
               padding: 3px 6px;
               margin: 4px 0;
               border-radius: 0 4px 4px 0;
               font-size: 8px;
-              color: #E65100;
+              color: #000;
               line-height: 1.2;
               font-weight: bold;
             ">
@@ -237,7 +232,7 @@ export default function StudentList() {
                 text: `Adesivo da criança ${student.name} para impressão`,
                 files: [file]
               });
-              toast.success('Adesivo compartilhado! Salve na galeria');
+              toast.success('Adesivo salvo com sucesso!');
             } catch (error) {
               console.error('Erro ao compartilhar:', error);
               // Fallback para download se compartilhamento falhar
@@ -245,7 +240,7 @@ export default function StudentList() {
               link.download = `adesivo_${student.name.replace(/\s+/g, '_')}.png`;
               link.href = canvas.toDataURL('image/png');
               link.click();
-              toast.success('Adesivo baixado! Salve na galeria');
+              toast.success('Adesivo salvo com sucesso!');
             }
           } else {
             // Fallback para navegadores que não suportam Web Share API
@@ -253,7 +248,7 @@ export default function StudentList() {
             link.download = `adesivo_${student.name.replace(/\s+/g, '_')}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
-            toast.success('Adesivo baixado! Salve na galeria');
+                          toast.success('Adesivo salvo com sucesso!');
           }
         }
       }, 'image/png');
