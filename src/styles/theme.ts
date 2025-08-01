@@ -1,11 +1,11 @@
 export const theme = {
     colors: {
-      primary: "#FF914D",
-      primaryHover: "#e97f38",
-      secondary: "#7EBBDE",
-      secondaryHover: "#6BA9CE",
-      success: "#6BBF59",
-      successHover: "#5EAA50",
+      primary: "#FFB6C1",
+      primaryHover: "#FF69B4",
+      secondary: "#87CEEB",
+      secondaryHover: "#4169E1",
+      success: "#98FB98",
+      successHover: "#32CD32",
       textLight: "#fff",
       textDark: "#333",
     },

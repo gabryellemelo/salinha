@@ -25,14 +25,14 @@ const getButtonStyles = (color: string, variant: string) => {
     case "outline":
       return {
         background: "transparent",
-        color: base,
-        border: `2px solid ${base}`,
+        color: "#333",
+        border: `2px solid #FFB6C1`,
         hover,
       };
     case "ghost":
       return {
         background: "transparent",
-        color: base,
+        color: "#333",
         border: "none",
         hover: "inherit",
       };
@@ -54,17 +54,19 @@ const ButtonBase = styled.button<ButtonProps>`
   font-weight: bold;
   font-size: 15px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 
-  background-color: ${(props) =>
+  background: ${(props) =>
     getButtonStyles(props.color || "primary", props.variant || "solid").background};
   color: ${(props) =>
     props.textColor || getButtonStyles(props.color || "primary", props.variant || "solid").color};
   border: ${(props) => getButtonStyles(props.color || "primary", props.variant || "solid").border};
 
   &:hover {
-    background-color: ${(props) =>
+    background: ${(props) =>
       getButtonStyles(props.color || "primary", props.variant || "solid").hover};
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 `;
 

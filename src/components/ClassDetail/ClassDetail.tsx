@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./styles";
-import Ball from "../../assets/ball.png";
 import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import toast from "react-hot-toast";
@@ -63,7 +62,7 @@ export default function ClassDetail() {
         return;
       }
 
-      const todaySchedules = (data || []).filter((item) => {
+      const todaySchedules = (data || []).filter((item: any) => {
         const date = new Date(item.schedule.datetime);
         const today = new Date();
         return (
@@ -73,7 +72,7 @@ export default function ClassDetail() {
         );
       });
 
-      setClasses(todaySchedules);
+      setClasses(todaySchedules as unknown as IClassDetail[]);
       setIsLoading(false);
     };
 
@@ -84,7 +83,7 @@ export default function ClassDetail() {
   return (
     <S.Container>
       <S.CardContainer>
-        <S.Icon src={Ball} alt="Bola colorida" />
+        <S.ModernIcon>🎨</S.ModernIcon>
 
         <Typography align="center" size="22px" weight="bold" margin="0 0 16px">
           Sua Escala no Sara Kids
@@ -121,22 +120,24 @@ export default function ClassDetail() {
                   })}
                 </Typography>
 
-                <Button
-                  type="button"
-                  color="secondary"
-                  size="md"
-                  style={{ width: "100%", marginTop: 20 }}
-                  onClick={() => {
-                    setSession(
-                      Number(item.schedule.id),
-                      Number(item.schedule.class.id),
-                      item.schedule.datetime
-                    );
-                    navigate("/cadastro");
-                  }}
-                >
-                  Abrir salinha
-                </Button>
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginTop: "16px" }}>
+                  <Button
+                    type="button"
+                    color="primary"
+                    size="md"
+                    style={{ width: "100%" }}
+                    onClick={() => {
+                      setSession(
+                        Number(item.schedule.id),
+                        Number(item.schedule.class.id),
+                        item.schedule.datetime
+                      );
+                      navigate("/checkin");
+                    }}
+                  >
+                    Abrir Salinha
+                  </Button>
+                </div>
               </S.ScheduleCard>
             ))}
           </div>
