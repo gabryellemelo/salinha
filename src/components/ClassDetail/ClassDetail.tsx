@@ -7,19 +7,7 @@ import toast from "react-hot-toast";
 import client from "../../client";
 import { useAuth } from "../../hooks/useAuth";
 import { useSessionStore } from "../../store/useSessionStore";
-
-interface IClassDetail {
-  schedule: {
-    id: string;
-    datetime: string;
-    class: {
-      id: string;
-      name: string;
-      max_age: number;
-      min_age: number;
-    };
-  };
-}
+import { IClassDetail } from "../../models/Class";
 
 export default function ClassDetail() {
   const auth = useAuth();
@@ -64,7 +52,8 @@ export default function ClassDetail() {
         return;
       }
 
-      const todaySchedules = (data || []).filter((item: any) => {
+      const dataTyped = data as unknown as IClassDetail[];
+      const todaySchedules = (dataTyped || []).filter((item) => {
         const date = new Date(item.schedule.datetime);
         const today = new Date();
         return (

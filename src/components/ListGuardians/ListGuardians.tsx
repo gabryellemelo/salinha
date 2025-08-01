@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useChildList } from "../../hooks/useChildList";
 import * as S from "./styles";
 import Typography from "../ui/Typography";
 import Button from "../ui/Button";
-import Modal from "../Modal/Modal";
-import { useClassStore } from "../../store/useClassStore";
 import { useAuth } from "../../hooks/useAuth";
 import { useGuardian } from "../../hooks/useGuardian";
 import { Student } from "../ListStudent/ListStudent";

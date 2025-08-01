@@ -1,10 +1,12 @@
 import client from "../client";
+import { IChild } from "../models/Child";
 
 export const useChildList = () => {
   const getChildren = async (classId: number) => {
     const { data, error } = await client
       .from("child")
-      .select(`
+      .select(
+        `
         id,
         name,
         age,
@@ -25,11 +27,13 @@ export const useChildList = () => {
       )
       .eq("class_id", classId);
 
+    const dataTyped = data as unknown as IChild[];
+
     if (error) {
       console.error("Erro ao buscar crianças e responsáveis:", error);
     } else {
       console.log("Crianças com responsáveis:", data);
-      return data.map((child) => ({
+      return dataTyped.map((child) => ({
         ...child,
         guardian_child: child.guardian_child.map((gc) => ({
           id: gc.guardian.id,
@@ -39,7 +43,7 @@ export const useChildList = () => {
       }));
     }
 
-    return data.map((c: any) => ({
+    return dataTyped.map((c: IChild) => ({
       id: c.id,
       name: c.name,
       age: c.age,
@@ -54,7 +58,8 @@ export const useChildList = () => {
   const getAllChildren = async () => {
     const { data, error } = await client
       .from("child")
-      .select(`
+      .select(
+        `
         id,
         name,
         age,
@@ -66,7 +71,8 @@ export const useChildList = () => {
           name,
           phone
         )
-      `)
+      `
+      )
       .order("name");
 
     if (error) {
@@ -88,9 +94,10 @@ export const useChildList = () => {
   };
 
   const getChildrenForEvent = async (scheduleId: number) => {
-          const { data, error } = await client
-        .from("event_attendance")
-        .select(`
+    const { data, error } = await client
+      .from("event_attendance")
+      .select(
+        `
           id,
           child_id,
           schedule_id,
@@ -109,7 +116,8 @@ export const useChildList = () => {
               phone
             )
           )
-        `)
+        `
+      )
       .eq("schedule_id", scheduleId)
       .order("check_in_time");
 
@@ -122,7 +130,8 @@ export const useChildList = () => {
       id: attendance.child.id,
       name: attendance.child.name,
       age: attendance.child.age,
-      intolerances_restrictions: attendance.child.intolerances_restrictions || "",
+      intolerances_restrictions:
+        attendance.child.intolerances_restrictions || "",
       image_authorization: attendance.child.image_authorization || false,
       guardian: attendance.child.guardian?.name || "N/A",
       phone: attendance.child.guardian?.phone || "",
@@ -146,8 +155,8 @@ export const useChildList = () => {
       const { error } = await client
         .from("event_attendance")
         .update({
-          status: 'present',
-          check_in_time: new Date().toISOString()
+          status: "present",
+          check_in_time: new Date().toISOString(),
         })
         .eq("id", existingAttendance.id);
 
@@ -156,14 +165,12 @@ export const useChildList = () => {
         throw error;
       }
     } else {
-      const { error } = await client
-        .from("event_attendance")
-        .insert({
-          child_id: childId,
-          schedule_id: scheduleId,
-          status: 'present',
-          check_in_time: new Date().toISOString()
-        });
+      const { error } = await client.from("event_attendance").insert({
+        child_id: childId,
+        schedule_id: scheduleId,
+        status: "present",
+        check_in_time: new Date().toISOString(),
+      });
 
       if (error) {
         console.error("Erro ao fazer check-in:", error.message);
@@ -176,8 +183,8 @@ export const useChildList = () => {
     const { error } = await client
       .from("event_attendance")
       .update({
-        status: 'checked_out',
-        check_out_time: new Date().toISOString()
+        status: "checked_out",
+        check_out_time: new Date().toISOString(),
       })
       .eq("child_id", childId)
       .eq("schedule_id", scheduleId);
@@ -206,6 +213,6 @@ export const useChildList = () => {
     getChildrenForEvent,
     checkInChild,
     checkOutChild,
-    releaseChild
+    releaseChild,
   };
 };

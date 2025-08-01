@@ -10,6 +10,7 @@ import * as S from "./styles";
 import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import toast from "react-hot-toast";
+import { IChild } from "../../models/Child";
 
 export default function EventCheckin() {
   const navigate = useNavigate();
@@ -134,7 +135,7 @@ export default function EventCheckin() {
   //     }
   //   };
 
-  const handleDownloadSticker = async (child: any) => {
+  const handleDownloadSticker = async (child: IChild) => {
     try {
       const stickerDiv = document.createElement("div");
       stickerDiv.style.cssText = `

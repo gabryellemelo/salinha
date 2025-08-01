@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import client from "../client";
+import { IChild } from "../models/Child";
 
 export interface AttendanceRecord {
   id: number;
@@ -7,7 +8,7 @@ export interface AttendanceRecord {
   scheduleId: number;
   checkInTime: string;
   checkOutTime?: string;
-  status: 'present' | 'absent' | 'checked_out';
+  status: "present" | "absent" | "checked_out";
   releasedBy?: string;
   child: {
     id: number;
@@ -22,31 +23,27 @@ export interface AttendanceRecord {
   };
 }
 
-export interface AvailableChild {
-  id: number;
-  name: string;
-  age: number;
-  intolerances_restrictions: string;
-  image_authorization: boolean;
-  guardian: string;
-  phone: string;
+export type AvailableChild = IChild & {
   classId: number;
-}
+};
 
 export const useEventCheckin = () => {
   const [attendanceData, setAttendanceData] = useState<AttendanceRecord[]>([]);
-  const [availableChildren, setAvailableChildren] = useState<AvailableChild[]>([]);
+  const [availableChildren, setAvailableChildren] = useState<AvailableChild[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const getEventAttendance = async (scheduleId: number) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const { data, error } = await client
         .from("event_attendance")
-        .select(`
+        .select(
+          `
           id,
           child_id,
           schedule_id,
@@ -65,7 +62,8 @@ export const useEventCheckin = () => {
               phone
             )
           )
-        `)
+        `
+        )
         .eq("schedule_id", scheduleId)
         .order("check_in_time");
 
@@ -85,7 +83,8 @@ export const useEventCheckin = () => {
           id: record.child.id,
           name: record.child.name,
           age: record.child.age,
-          intolerances_restrictions: record.child.intolerances_restrictions || "",
+          intolerances_restrictions:
+            record.child.intolerances_restrictions || "",
           image_authorization: record.child.image_authorization || false,
           guardian: {
             name: record.child.guardian?.name || "N/A",
@@ -108,11 +107,12 @@ export const useEventCheckin = () => {
   const getAvailableChildren = async (scheduleId: number) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const { data: allChildren, error: childrenError } = await client
         .from("child")
-        .select(`
+        .select(
+          `
           id,
           name,
           age,
@@ -123,7 +123,8 @@ export const useEventCheckin = () => {
             name,
             phone
           )
-        `)
+        `
+        )
         .order("name");
 
       if (childrenError) {
@@ -165,13 +166,13 @@ export const useEventCheckin = () => {
   };
 
   const markAttendance = async (
-    childId: number, 
-    scheduleId: number, 
-    status: 'present' | 'absent' | 'checked_out'
+    childId: number,
+    scheduleId: number,
+    status: "present" | "absent" | "checked_out"
   ) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const { data: existingRecord } = await client
         .from("event_attendance")
@@ -182,10 +183,10 @@ export const useEventCheckin = () => {
 
       if (existingRecord) {
         const updateData: any = { status };
-        
-        if (status === 'present') {
+
+        if (status === "present") {
           updateData.check_in_time = new Date().toISOString();
-        } else if (status === 'checked_out') {
+        } else if (status === "checked_out") {
           updateData.check_out_time = new Date().toISOString();
         }
 
@@ -204,7 +205,7 @@ export const useEventCheckin = () => {
           status,
         };
 
-        if (status === 'present') {
+        if (status === "present") {
           insertData.check_in_time = new Date().toISOString();
         }
 
@@ -231,7 +232,7 @@ export const useEventCheckin = () => {
   const removeAttendance = async (childId: number, scheduleId: number) => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const { error } = await client
         .from("event_attendance")
@@ -264,4 +265,4 @@ export const useEventCheckin = () => {
     markAttendance,
     removeAttendance,
   };
-}; 
+};

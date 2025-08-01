@@ -8,7 +8,6 @@ import client from "./client";
 import { Toaster } from "react-hot-toast";
 import ClassDetail from "./components/ClassDetail/ClassDetail";
 import { useAuth } from "./hooks/useAuth";
-import GuardianList from "./components/ListGuardians/ListGuardians";
 
 function App() {
   const auth = useAuth();
