@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./styles";
-import Ball from "../../assets/ball.png";
 import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import { useStudent } from "../../hooks/useStudent";
 import toast from "react-hot-toast";
-import { useClassStore } from "../../store/useClassStore";
+import { useSessionStore } from "../../store/useSessionStore";
 
 export default function CreateStudent() {
   const [formData, setFormData] = useState({
@@ -15,14 +14,45 @@ export default function CreateStudent() {
     age: "",
     responsible: "",
     telephone: "",
+    intolerances_restrictions: "",
+    image_authorization: false,
   });
 
   const navigate = useNavigate();
   const { createStudent } = useStudent();
-  const { classId } = useClassStore();
+  const { classId } = useSessionStore();
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  console.log("CreateStudent - classId:", classId);
+
+  if (!classId) {
+    return (
+      <S.Container>
+        <S.Card>
+          <S.Header>
+            <S.Icon>🎨</S.Icon>
+            <Typography style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "16px" }}>
+              Turma não selecionada
+            </Typography>
+            <Typography style={{ color: "#555", marginBottom: "24px" }}>
+              Por favor, selecione uma turma primeiro.
+            </Typography>
+          </S.Header>
+          <Button
+            type="button"
+            color="primary"
+            size="md"
+            style={{ width: "100%" }}
+            onClick={() => navigate("/")}
+          >
+            Voltar para Seleção de Turma
+          </Button>
+        </S.Card>
+      </S.Container>
+    );
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     if (name === "telephone") {
@@ -47,10 +77,15 @@ export default function CreateStudent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { name, age, responsible, telephone } = formData;
+    const { name, age, responsible, telephone, intolerances_restrictions, image_authorization } = formData;
 
     if (!name || !age || !responsible || !telephone) {
-      toast.error("Preencha todos os campos");
+      toast.error("Preencha todos os campos obrigatórios");
+      return;
+    }
+
+    if (image_authorization === undefined) {
+      toast.error("Selecione uma opção para autorização de imagens");
       return;
     }
 
@@ -67,17 +102,32 @@ export default function CreateStudent() {
         age: age,
         responsible,
         telephone,
+        intolerances_restrictions,
+        image_authorization,
         class_id: classId,
       });
 
-      toast.success("Criança cadastrada com sucesso!");
+      toast.success("Criança cadastrada com sucesso! Redirecionando para o sistema de check-in...");
 
       setFormData({
         name: "",
         age: "",
         responsible: "",
         telephone: "",
+        intolerances_restrictions: "",
+        image_authorization: false,
       });
+
+      const returnToCheckin = sessionStorage.getItem('returnToCheckin');
+
+      setTimeout(() => {
+        if (returnToCheckin === 'true') {
+          sessionStorage.removeItem('returnToCheckin');
+          navigate("/checkin");
+        } else {
+          navigate("/lista");
+        }
+      }, 1500);
     } catch (error) {
       console.error(error);
       toast.error("Erro ao cadastrar criança. Tente novamente.");
@@ -88,24 +138,18 @@ export default function CreateStudent() {
 
   return (
     <S.Container>
-      <S.CardContainer>
-        <S.Icon src={Ball} alt="Bola colorida" />
-
-        <Typography align="center" size="22px" weight="bold" margin="0 0 8px">
-          Cadastro da Criança
-        </Typography>
-
-        <Typography
-          align="center"
-          size="14px"
-          color="#555"
-          margin="0 0 24px"
-          lineHeight="1.5"
-        >
-          “Ensina a criança no caminho em que deve andar, <br />
-          e mesmo quando envelhecer não se desviará dele.” <br />
-          <em>Provérbios 22:6</em>
-        </Typography>
+      <S.Card>
+        <S.Header>
+          <S.Icon>🎨</S.Icon>
+          <Typography style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "8px" }}>
+            Cadastro da Criança
+          </Typography>
+          <Typography style={{ color: "#666", marginBottom: "20px", textAlign: "center", lineHeight: "1.5" }}>
+            "Ensina a criança no caminho em que deve andar, <br />
+            e mesmo quando envelhecer não se desviará dele." <br />
+            <em>Provérbios 22:6</em>
+          </Typography>
+        </S.Header>
 
         <S.Form onSubmit={handleSubmit}>
           <S.InputContainer>
@@ -139,33 +183,78 @@ export default function CreateStudent() {
               type="tel"
               value={formData.telephone}
               onChange={handleChange}
-              style={{ marginBottom: "20px" }}
               autoComplete="off"
             />
+            <Input
+              name="intolerances_restrictions"
+              placeholder="Intolerâncias/Restrições (opcional)"
+              type="text"
+              value={formData.intolerances_restrictions}
+              onChange={handleChange}
+              autoComplete="off"
+            />
+
+            <S.AuthorizationSection>
+              <Typography style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "8px" }}>
+                Autorização de Imagens:
+              </Typography>
+              <S.RadioContainer>
+                <S.RadioButton
+                  selected={formData.image_authorization === true}
+                  onClick={() => setFormData(prev => ({ ...prev, image_authorization: true }))}
+                >
+                  <input
+                    type="radio"
+                    name="image_authorization"
+                    value="true"
+                    checked={formData.image_authorization === true}
+                    onChange={() => setFormData(prev => ({ ...prev, image_authorization: true }))}
+                    style={{ display: "none" }}
+                  />
+                  <span>Sim</span>
+                </S.RadioButton>
+                <S.RadioButton
+                  selected={formData.image_authorization === false}
+                  isNo={true}
+                  onClick={() => setFormData(prev => ({ ...prev, image_authorization: false }))}
+                >
+                  <input
+                    type="radio"
+                    name="image_authorization"
+                    value="false"
+                    checked={formData.image_authorization === false}
+                    onChange={() => setFormData(prev => ({ ...prev, image_authorization: false }))}
+                    style={{ display: "none" }}
+                  />
+                  <span>Não</span>
+                </S.RadioButton>
+              </S.RadioContainer>
+            </S.AuthorizationSection>
           </S.InputContainer>
 
-          <Button
-            type="submit"
-            color="primary"
-            size="md"
-            style={{ width: "100%", marginTop: "20px" }}
-            disabled={isLoading}
-          >
-            {isLoading ? "Cadastrando..." : "Cadastrar"}
-          </Button>
+          <S.Actions>
+            <Button
+              type="submit"
+              color="primary"
+              size="md"
+              style={{ width: "100%", marginBottom: "12px" }}
+              disabled={isLoading}
+            >
+              {isLoading ? "Cadastrando..." : "Cadastrar"}
+            </Button>
 
-          <Button
-            type="button"
-            color="secondary"
-            size="md"
-            style={{ width: "100%", marginTop: "12px" }}
-            onClick={() => navigate("/lista-responsaveis")}
-            // onClick={() => navigate("/lista")}
-          >
-            Ver Lista de Crianças
-          </Button>
+            <Button
+              type="button"
+              color="secondary"
+              size="md"
+              style={{ width: "100%" }}
+              onClick={() => navigate("/checkin")}
+            >
+              Ir para o Check-in
+            </Button>
+          </S.Actions>
         </S.Form>
-      </S.CardContainer>
+      </S.Card>
     </S.Container>
   );
 }

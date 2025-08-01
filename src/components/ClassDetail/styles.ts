@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-  background-color: #F8D7DD
-  ;
+  background: linear-gradient(135deg, #FFE5F1 0%, #FFE4B5 25%, #E8F4FD 50%, #F0FFF0 75%, #F8E6FF 100%);
   width: 100vw;
   min-height: 100vh;
   display: flex;
@@ -14,18 +13,21 @@ export const Container = styled.div`
 `;
 
 export const CardContainer = styled.div`
-  background-color: #fff;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 30px 20px;
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   text-align: center;
 `;
 
-export const Icon = styled.img`
-  width: 100px;
-  height: 100px;
+export const ModernIcon = styled.div`
+  font-size: 80px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 `;
 
 export const InputContainer = styled.div`
@@ -44,6 +46,7 @@ export const ScheduleCard = styled.div`
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   text-align: left;
+  border: 1px solid #ddd;
 `;
 
 export const ListContainer = styled.div`
