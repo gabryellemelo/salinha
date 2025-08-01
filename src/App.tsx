@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./components/SignIn/Login";
 import CreateStudent from "./components/CreateStudent/CreateStudent";
-import StudentList from "./components/ListStudent/ListStudent";
+import EventCheckin from "./components/EventCheckin/EventCheckin";
+import AttendanceList from "./components/AttendanceList/AttendanceList";
 import client from "./client";
 import { Toaster } from "react-hot-toast";
 import ClassDetail from "./components/ClassDetail/ClassDetail";
@@ -45,7 +46,8 @@ function App() {
       <Routes>
         <Route path="/" element={<ClassDetail />} />
         <Route path="/cadastro" element={<CreateStudent />} />
-        <Route path="/lista" element={<StudentList />} />
+        <Route path="/checkin" element={<EventCheckin />} />
+        <Route path="/lista-presencas" element={<AttendanceList />} />
       </Routes>
       <Toaster position="top-right" toastOptions={{ duration: 3000 }} />
     </>

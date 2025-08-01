@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./styles";
-import Ball from "../../assets/ball.png";
 import Typography from "../ui/Typography";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
@@ -29,14 +28,16 @@ export default function CreateStudent() {
   if (!classId) {
     return (
       <S.Container>
-        <S.CardContainer>
-          <S.Icon src={Ball} alt="Bola colorida" />
-          <Typography align="center" size="22px" weight="bold" margin="0 0 16px">
-            Turma não selecionada
-          </Typography>
-          <Typography align="center" size="14px" color="#555" margin="0 0 24px">
-            Por favor, selecione uma turma primeiro.
-          </Typography>
+        <S.Card>
+          <S.Header>
+            <S.Icon>🎨</S.Icon>
+            <Typography style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "16px" }}>
+              Turma não selecionada
+            </Typography>
+            <Typography style={{ color: "#555", marginBottom: "24px" }}>
+              Por favor, selecione uma turma primeiro.
+            </Typography>
+          </S.Header>
           <Button
             type="button"
             color="primary"
@@ -46,7 +47,7 @@ export default function CreateStudent() {
           >
             Voltar para Seleção de Turma
           </Button>
-        </S.CardContainer>
+        </S.Card>
       </S.Container>
     );
   }
@@ -106,7 +107,7 @@ export default function CreateStudent() {
         class_id: classId,
       });
 
-      toast.success("Criança cadastrada com sucesso!");
+      toast.success("Criança cadastrada com sucesso! Redirecionando para o sistema de check-in...");
 
       setFormData({
         name: "",
@@ -116,6 +117,17 @@ export default function CreateStudent() {
         intolerances_restrictions: "",
         image_authorization: false,
       });
+
+      const returnToCheckin = sessionStorage.getItem('returnToCheckin');
+      
+      setTimeout(() => {
+        if (returnToCheckin === 'true') {
+          sessionStorage.removeItem('returnToCheckin');
+          navigate("/checkin");
+        } else {
+          navigate("/lista");
+        }
+      }, 1500);
     } catch (error) {
       console.error(error);
       toast.error("Erro ao cadastrar criança. Tente novamente.");
@@ -126,24 +138,18 @@ export default function CreateStudent() {
 
   return (
     <S.Container>
-      <S.CardContainer>
-        <S.Icon src={Ball} alt="Bola colorida" />
-
-        <Typography align="center" size="22px" weight="bold" margin="0 0 8px">
-          Cadastro da Criança
-        </Typography>
-
-        <Typography
-          align="center"
-          size="14px"
-          color="#555"
-          margin="0 0 24px"
-          lineHeight="1.5"
-        >
-          "Ensina a criança no caminho em que deve andar, <br />
-          e mesmo quando envelhecer não se desviará dele." <br />
-          <em>Provérbios 22:6</em>
-        </Typography>
+      <S.Card>
+        <S.Header>
+          <S.Icon>🎨</S.Icon>
+          <Typography style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "8px" }}>
+            Cadastro da Criança
+          </Typography>
+          <Typography style={{ color: "#666", marginBottom: "20px", textAlign: "center", lineHeight: "1.5" }}>
+            "Ensina a criança no caminho em que deve andar, <br />
+            e mesmo quando envelhecer não se desviará dele." <br />
+            <em>Provérbios 22:6</em>
+          </Typography>
+        </S.Header>
 
         <S.Form onSubmit={handleSubmit}>
           <S.InputContainer>
@@ -188,23 +194,15 @@ export default function CreateStudent() {
               autoComplete="off"
             />
             
-            <div style={{ marginTop: "16px" }}>
-              <Typography size="14px" weight="bold" margin="0 0 8px">
+            <S.AuthorizationSection>
+              <Typography style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "8px" }}>
                 Autorização de Imagens:
               </Typography>
-              <div style={{ display: "flex", gap: "12px" }}>
-                <label style={{ 
-                  display: "flex", 
-                  alignItems: "center", 
-                  gap: "8px", 
-                  cursor: "pointer",
-                  padding: "8px 16px",
-                  border: "2px solid #e1e5e9",
-                  borderRadius: "8px",
-                  backgroundColor: formData.image_authorization === true ? "#4CAF50" : "white",
-                  color: formData.image_authorization === true ? "white" : "#333",
-                  transition: "all 0.2s ease"
-                }}>
+              <S.RadioContainer>
+                <S.RadioButton
+                  selected={formData.image_authorization === true}
+                  onClick={() => setFormData(prev => ({ ...prev, image_authorization: true }))}
+                >
                   <input
                     type="radio"
                     name="image_authorization"
@@ -213,20 +211,13 @@ export default function CreateStudent() {
                     onChange={() => setFormData(prev => ({ ...prev, image_authorization: true }))}
                     style={{ display: "none" }}
                   />
-                  <span style={{ fontWeight: "500" }}>Sim</span>
-                </label>
-                <label style={{ 
-                  display: "flex", 
-                  alignItems: "center", 
-                  gap: "8px", 
-                  cursor: "pointer",
-                  padding: "8px 16px",
-                  border: "2px solid #e1e5e9",
-                  borderRadius: "8px",
-                  backgroundColor: formData.image_authorization === false ? "#f44336" : "white",
-                  color: formData.image_authorization === false ? "white" : "#333",
-                  transition: "all 0.2s ease"
-                }}>
+                  <span>Sim</span>
+                </S.RadioButton>
+                <S.RadioButton
+                  selected={formData.image_authorization === false}
+                  isNo={true}
+                  onClick={() => setFormData(prev => ({ ...prev, image_authorization: false }))}
+                >
                   <input
                     type="radio"
                     name="image_authorization"
@@ -235,33 +226,35 @@ export default function CreateStudent() {
                     onChange={() => setFormData(prev => ({ ...prev, image_authorization: false }))}
                     style={{ display: "none" }}
                   />
-                  <span style={{ fontWeight: "500" }}>Não</span>
-                </label>
-              </div>
-            </div>
+                  <span>Não</span>
+                </S.RadioButton>
+              </S.RadioContainer>
+            </S.AuthorizationSection>
           </S.InputContainer>
 
-          <Button
-            type="submit"
-            color="primary"
-            size="md"
-            style={{ width: "100%", marginTop: "20px" }}
-            disabled={isLoading}
-          >
-            {isLoading ? "Cadastrando..." : "Cadastrar"}
-          </Button>
+          <S.Actions>
+            <Button
+              type="submit"
+              color="primary"
+              size="md"
+              style={{ width: "100%", marginBottom: "12px" }}
+              disabled={isLoading}
+            >
+              {isLoading ? "Cadastrando..." : "Cadastrar"}
+            </Button>
 
-          <Button
-            type="button"
-            color="secondary"
-            size="md"
-            style={{ width: "100%", marginTop: "12px" }}
-            onClick={() => navigate("/lista")}
-          >
-            Ver Lista de Crianças
-          </Button>
+            <Button
+              type="button"
+              color="secondary"
+              size="md"
+              style={{ width: "100%" }}
+              onClick={() => navigate("/checkin")}
+            >
+              Ir para o Check-in
+            </Button>
+          </S.Actions>
         </S.Form>
-      </S.CardContainer>
+      </S.Card>
     </S.Container>
   );
 }
