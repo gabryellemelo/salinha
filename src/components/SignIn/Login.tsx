@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
@@ -6,12 +7,9 @@ import Typography from "../ui/Typography";
 import * as S from "./styles";
 import toast from "react-hot-toast";
 
-interface LoginProps {
-  onLogin: () => void;
-}
-
-export default function Login({ onLogin }: LoginProps) {
+export default function Login() {
   const auth = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,7 +33,7 @@ export default function Login({ onLogin }: LoginProps) {
         return;
       }
       toast.success("Login realizado com sucesso!");
-      onLogin();
+      navigate("/");
     } catch (error) {
       setErrorMsg("Erro ao fazer login. Tente novamente.");
     } finally {
@@ -97,10 +95,20 @@ export default function Login({ onLogin }: LoginProps) {
           type="submit"
           color="primary"
           size="md"
-          style={{ width: "100%" }}
+          style={{ width: "100%", marginBottom: "12px" }}
           disabled={loading}
         >
           {loading ? "Entrando..." : "Entrar"}
+        </Button>
+
+        <Button
+          type="button"
+          color="secondary"
+          size="md"
+          style={{ width: "100%" }}
+          onClick={() => navigate("/admin-login")}
+        >
+          Painel do Administrador
         </Button>
       </S.FormContainer>
     </S.Container>
