@@ -75,10 +75,6 @@ export default function AdminPanel() {
             <S.StatNumber>{upcomingSchedules}</S.StatNumber>
             <S.StatLabel>Próximas Escalas</S.StatLabel>
           </S.StatCard>
-          <S.StatCard>
-            <S.StatNumber>{totalClasses}</S.StatNumber>
-            <S.StatLabel>Turmas</S.StatLabel>
-          </S.StatCard>
         </S.StatsContainer>
 
         <S.ActionsContainer>
