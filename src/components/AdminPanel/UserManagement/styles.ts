@@ -9,9 +9,8 @@ export const Container = styled.div`
   background: linear-gradient(135deg, #FFE5F1 0%, #FFE4B5 25%, #E8F4FD 50%, #F0FFF0 75%, #F8E6FF 100%);
   
   @media (max-width: 768px) {
-    padding: 8px;
-    align-items: flex-start;
-    min-height: auto;
+    padding: 12px;
+    align-items: center;
   }
 `;
 
@@ -26,11 +25,9 @@ export const Card = styled.div`
   max-width: 1200px;
   
   @media (max-width: 768px) {
-    padding: 12px;
-    border-radius: 12px;
+    padding: 16px;
+    border-radius: 16px;
     max-width: 100%;
-    margin: 0;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
 `;
 
