@@ -58,10 +58,10 @@ export default function AdminPanel() {
       <S.Card>
         <S.Header>
           <S.Icon>⛪</S.Icon>
-          <Typography style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "8px" }}>
+          <Typography style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "8px", textAlign: "center" }}>
             Painel do Administrador
           </Typography>
-          <Typography style={{ color: "#666", marginBottom: "20px" }}>
+          <Typography style={{ color: "#666", marginBottom: "20px", textAlign: "center" }}>
             Gerencie usuários e escalas do sistema
           </Typography>
         </S.Header>
